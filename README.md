@@ -45,12 +45,12 @@ poetry install
 
 2) Crie o `.env` na raiz do projeto:
 ```env
-ASYNC_DATABASE_URL="postgresql+psycopg://app_user:app_password@127.0.0.1:5432/app_db"
+DATABASE_URL="postgresql+psycopg://app_user:app_password@127.0.0.1:5432/app_db"
 SECRET_KEY="troque-isto"
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
-Observação: no Docker Compose, o `ASYNC_DATABASE_URL` pode apontar para o serviço `backend_database`.
+Observação: no Docker Compose, o `DATABASE_URL` pode apontar para o serviço `backend_database`.
 
 ## Desenvolvimento rápido (DB no Docker, app local) — recomendado
 
@@ -70,7 +70,7 @@ Procure por “database system is ready to accept connections”.
 
 3) Ajustar o `.env` para apontar para o host:
 ```env
-ASYNC_DATABASE_URL="postgresql+psycopg://app_user:app_password@127.0.0.1:5432/app_db"
+DATABASE_URL="postgresql+psycopg://app_user:app_password@127.0.0.1:5432/app_db"
 ```
 
 4) Rodar migrações localmente (se necessário):
@@ -154,10 +154,10 @@ Se os testes usarem testcontainers, abra o Docker Desktop antes.
 
 - `backend.settings.Settings`
   - Lê variáveis do `.env` via Pydantic Settings:
-    - `ASYNC_DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`.
+    - `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`.
 
 - `backend.database.get_session()`
-  - Dependência que fornece `AsyncSession` (SQLAlchemy async) usando `Settings().ASYNC_DATABASE_URL`.
+  - Dependência que fornece `AsyncSession` (SQLAlchemy async) usando `Settings().DATABASE_URL`.
   - Uso em rotas: `Session = Annotated[AsyncSession, Depends(get_session)]`.
 
 - `backend.security`
@@ -217,7 +217,7 @@ cd <pasta-do-novo-repo>
   - Veja quem escuta a porta: `netstat -ano | findstr ":5432"`.
 
 - Alembic/psycopg: “password authentication failed”
-  - Geralmente `ASYNC_DATABASE_URL` apontando pro banco errado; confira `.env` e `compose`.
+  - Geralmente `DATABASE_URL` apontando pro banco errado; confira `.env` e `compose`.
 
 - Testcontainers não encontra Docker (npipe … não encontrado)
   - Abra/reenicie o Docker Desktop e valide com `docker ps`.
